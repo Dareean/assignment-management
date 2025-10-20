@@ -1,4 +1,3 @@
-// app/Models/User.ts
 import { randomBytes } from 'crypto'
 
 export interface User {
@@ -44,7 +43,6 @@ export class UserModel {
   }
 
   static async generateToken(userId: string) {
-    // Generate token dengan format: token_randomString_userId
     const randomString = randomBytes(32).toString('hex')
     return `token_${randomString}_${userId}`
   }

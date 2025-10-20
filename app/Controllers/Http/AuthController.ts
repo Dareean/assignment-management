@@ -1,4 +1,3 @@
-// app/Controllers/Http/AuthController.ts
 import hash from '@adonisjs/core/services/hash'
 
 export default class AuthController {
@@ -6,7 +5,6 @@ export default class AuthController {
     try {
       const { email, password } = request.only(['email', 'password'])
       
-      // Check if user exists
       const UserModel = (await import('../../Models/User.js')).UserModel
       const existingUser = await UserModel.findByEmail(email)
       
@@ -14,7 +12,6 @@ export default class AuthController {
         return response.conflict({ message: 'User already exists' })
       }
 
-      // Create new user
       const hashedPassword = await hash.make(password)
       const user = await UserModel.create({
         email,
@@ -36,8 +33,7 @@ export default class AuthController {
   async login({ request, response }: any) {
     try {
       const { email, password } = request.only(['email', 'password'])
-      
-      // Find user
+   
       const UserModel = (await import('../../Models/User.js')).UserModel
       const user = await UserModel.findByEmail(email)
       
@@ -45,13 +41,11 @@ export default class AuthController {
         return response.unauthorized({ message: 'Invalid credentials' })
       }
 
-      // Verify password
       const passwordValid = await hash.verify(user.password, password)
       if (!passwordValid) {
         return response.unauthorized({ message: 'Invalid credentials' })
       }
 
-      // Generate token
       const token = await UserModel.generateToken(user._id.toString())
 
       return response.ok({

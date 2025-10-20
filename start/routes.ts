@@ -1,7 +1,5 @@
-// start/routes.ts
 import router from '@adonisjs/core/services/router'
 
-// Initialize MongoDB connection
 async function initializeMongoDB() {
   try {
     const MongoDBService = (await import('../app/Services/MongoDBService.js')).default
@@ -14,7 +12,6 @@ async function initializeMongoDB() {
 
 initializeMongoDB()
 
-// Root endpoint
 router.get('/', async () => {
   return {
     message: 'Assignment Management API is running!',
@@ -34,7 +31,6 @@ router.get('/', async () => {
   }
 })
 
-// Auth routes - FIXED: Use direct import instead of string reference
 router.post('/register', async (ctx) => {
   const AuthController = (await import('../app/Controllers/Http/AuthController.js')).default
   return new AuthController().register(ctx)
@@ -45,7 +41,6 @@ router.post('/login', async (ctx) => {
   return new AuthController().login(ctx)
 })
 
-// Assignment routes - FIXED: Use direct import
 router.get('/assignments', async (ctx) => {
   const AssignmentsController = (await import('../app/Controllers/Http/AssignmentsController.js')).default
   return new AssignmentsController().index(ctx)

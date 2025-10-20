@@ -1,4 +1,3 @@
-// app/Controllers/Http/AssignmentsController.ts
 export default class AssignmentsController {
   private async authenticate(request: any) {
     const token = request.header('authorization')?.replace('Bearer ', '')
@@ -7,12 +6,10 @@ export default class AssignmentsController {
       throw new Error('No token provided')
     }
 
-    // Verify token format (sama dengan yang di generate di AuthController)
     if (!token.startsWith('token_')) {
       throw new Error('Invalid token format')
     }
 
-    // Extract user ID from token
     const parts = token.split('_')
     if (parts.length !== 3) {
       throw new Error('Invalid token')
@@ -20,7 +17,6 @@ export default class AssignmentsController {
 
     const userId = parts[2]
 
-    // Find user by ID
     const UserModel = (await import('../../Models/User.js')).UserModel
     const user = await UserModel.findById(userId)
 
