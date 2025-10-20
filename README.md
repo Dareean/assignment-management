@@ -93,7 +93,7 @@ bash
 node ace serve --watch
 Server will run at: http://localhost:3333
 
-📚 API Documentation
+## 📚 API Documentation
 Authentication Endpoints
 Register User
 http
@@ -151,7 +151,7 @@ Delete Assignment
 http
 DELETE /assignments/:id
 Authorization: Bearer your_token_here
-🔐 Authentication Flow
+## 🔐 Authentication Flow
 Register a new user at /register
 
 Login with credentials at /login to receive token
@@ -160,7 +160,7 @@ Use the token in Authorization header for all assignment requests
 
 Token format: Bearer token_randomstring_userid
 
-🗃️ Database Models
+## 🗃️ Database Models
 User Model
 typescript
 {
@@ -182,7 +182,7 @@ typescript
   createdAt: Date,
   updatedAt: Date
 }
-🧪 Testing the API
+## 🧪 Testing the API
 Use tools like:
 
 Thunder Client (VS Code extension)
@@ -207,14 +207,14 @@ curl -X POST http://localhost:3333/login \
 # 3. Use token for assignments
 curl -X GET http://localhost:3333/assignments \
   -H "Authorization: Bearer your_token_here"
-🚀 Deployment
+## 🚀 Deployment
 Build for Production
 bash
 node ace build
 Start Production Server
 bash
 node build/bin/server.js
-🤝 Contributing
+## 🤝 Contributing
 Fork the project
 
 Create your feature branch (git checkout -b feature/AmazingFeature)
@@ -225,11 +225,11 @@ Push to the branch (git push origin feature/AmazingFeature)
 
 Open a Pull Request
 
-📝 License
+## 📝 License
 This project is licensed under the MIT License.
 
-👨‍💻 Author
-Your Name
+## 👨‍💻 Author
+Dareean A. Raffi
 
 GitHub: @dareean
 
