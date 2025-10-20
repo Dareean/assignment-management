@@ -21,17 +21,35 @@ A robust and scalable RESTful API for managing assignments, built with AdonisJS 
 ## 📁 Project Structure
 assignment-management/
 ├── app/
-│ ├── Controllers/Http/
-│ │ ├── AuthController.ts
-│ │ └── AssignmentsController.ts
-│ ├── Models/
-│ │ ├── User.ts
-│ │ └── Assignment.ts
-│ └── Services/
-│ └── MongoDBService.ts
+│   ├── Controllers/
+│   │   └── Http/
+│   │       ├── AuthController.ts
+│   │       └── AssignmentsController.ts
+│   ├── Models/
+│   │   ├── Assignment.ts
+│   │   └── User.ts
+│   └── Services/
+│       └── MongoDBService.ts
 ├── start/
-│ └── routes.ts
+│   ├── routes.ts
+│   ├── kernel.ts
+│   ├── app.ts
+│   └── env.ts
+├── config/
+│   ├── app.ts
+│   ├── auth.ts
+│   ├── bodyparser.ts
+│   └── cors.ts
+├── bin/
+│   └── server.ts
+├── tests/
 ├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── adonisrc.ts
+├── tsconfig.json
 └── README.md
 
 text
