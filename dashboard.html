@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Management - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>Assignment</h1>
+                <p class="tagline">Task Management System</p>
+            </div>
+            <div class="user-menu">
+                <span class="user-info">
+                    <span id="userEmail">user@example.com</span>
+                </span>
+                <button class="btn btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Stats Summary -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="totalAssignments">0</div>
+                <div class="stat-label">Total Assignments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingAssignments">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedAssignments">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="overdueAssignments">0</div>
+                <div class="stat-label">Overdue</div>
+            </div>
+        </div>
+
+        <!-- Assignment Form -->
+        <section class="assignment-form">
+            <h2>➕ Tambah Assignment Baru</h2>
+            <form id="addAssignmentForm">
+                <div class="form-group">
+                    <label for="assignmentTitle">Judul Assignment</label>
+                    <input type="text" id="assignmentTitle" placeholder="Enter assignment title" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignmentDescription">Deskripsi</label>
+                    <textarea id="assignmentDescription" placeholder="Enter assignment description (optional)" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="assignmentDueDate">Due Date & Time</label>
+                        <input type="datetime-local" id="assignmentDueDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary" style="width: 100%">
+                            <span class="btn-text">Tambah Assignment</span>
+                            <span class="btn-loading hidden">Creating...</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Assignments List -->
+        <!-- Assignments List Section -->
+        <section class="assignments-section">
+            <div class="section-header">
+                <h2>📋 Daftar Assignment</h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                    <button class="filter-btn" data-filter="overdue">Overdue</button>
+                </div>
+            </div>
+
+            <div class="assignments-list">
+                <!-- Table Header -->
+                <div class="assignments-header">
+                    <div class="assignment-col title">Assignment</div>
+                    <div class="assignment-col status">Status</div>
+                    <div class="assignment-col description">Description</div>
+                    <div class="assignment-col due-date">Due Date</div>
+                    <div class="assignment-col actions">Actions</div>
+                </div>
+
+                <!-- Table Body -->
+                <div id="assignmentsContainer">
+                    <!-- Dynamic content will be loaded here -->
+                    <div class="assignment-item loading">
+                        <div class="assignment-col title">
+                            <div class="assignment-title">Loading assignments...</div>
+                        </div>
+                        <div class="assignment-col status">-</div>
+                        <div class="assignment-col description">-</div>
+                        <div class="assignment-col due-date">-</div>
+                        <div class="assignment-col actions">-</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+            <div class="empty-icon">📝</div>
+            <h3>No Assignments Yet</h3>
+            <p>Create your first assignment to get started!</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="api.js"></script>
+    <script src="dashboard.js"></script>
+
+    <script>
+        // Additional dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    filterAssignments(filter);
+                });
+            });
+
+            // Update stats
+            function updateStats(assignments) {
+                const total = assignments.length;
+                const pending = assignments.filter(a => !a.isCompleted && new Date(a.dueDate) >= new Date()).length;
+                const completed = assignments.filter(a => a.isCompleted).length;
+                const overdue = assignments.filter(a => !a.isCompleted && new Date(a.dueDate) < new Date()).length;
+
+                document.getElementById('totalAssignments').textContent = total;
+                document.getElementById('pendingAssignments').textContent = pending;
+                document.getElementById('completedAssignments').textContent = completed;
+                document.getElementById('overdueAssignments').textContent = overdue;
+            }
+
+            // Filter assignments
+            function filterAssignments(filter) {
+                const assignments = document.querySelectorAll('.assignment-item:not(.loading)');
+                assignments.forEach(assignment => {
+                    const isCompleted = assignment.classList.contains('completed');
+                    const isOverdue = assignment.classList.contains('overdue');
+                    
+                    let show = false;
+                    switch(filter) {
+                        case 'all':
+                            show = true;
+                            break;
+                        case 'pending':
+                            show = !isCompleted && !isOverdue;
+                            break;
+                        case 'completed':
+                            show = isCompleted;
+                            break;
+                        case 'overdue':
+                            show = isOverdue;
+                            break;
+                    }
+                    
+                    assignment.style.display = show ? 'block' : 'none';
+                });
+            }
+
+            // Make functions available globally
+            window.updateStats = updateStats;
+            window.filterAssignments = filterAssignments;
+        });
+    </script>
+</body>
+</html>
